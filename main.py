@@ -38,6 +38,19 @@ def write_entry(path: str, text: str) -> None:
         f.write(text)
 
 
+def write_repo_copy(text: str) -> None:
+    """Best-effort convenience copy next to this script (repo root).
+
+    The grader sandbox mounts /bot read-only, so this write may fail;
+    it must never crash the run.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    try:
+        write_entry(os.path.join(here, "entry.txt"), text)
+    except OSError:
+        pass
+
+
 def main() -> None:
     text = LINE + "\n"
 
@@ -46,13 +59,7 @@ def main() -> None:
     write_entry(resolve_output_path(), text)
 
     # Best-effort convenience copy next to this script (repo root).
-    # The grader sandbox mounts /bot read-only, so this write may fail;
-    # it must never crash the run.
-    here = os.path.dirname(os.path.abspath(__file__))
-    try:
-        write_entry(os.path.join(here, "entry.txt"), text)
-    except OSError:
-        pass
+    write_repo_copy(text)
 
 
 if __name__ == "__main__":
